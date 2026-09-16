@@ -1,0 +1,35 @@
+name: canine-spleen-benchmark
+
+x-monailabel-common: &monailabel-common
+  image: ${MONAI_LABEL_IMAGE:-projectmonai/monailabel:0.8.5}
+  ipc: host
+  working_dir: /workspace
+  volumes:
+    - ./workspace:/workspace
+    - ./docker/start-monailabel.sh:/usr/local/bin/start-monailabel:ro
+  command: ["/bin/bash", "/usr/local/bin/start-monailabel"]
+  environment:
+    MONAI_LABEL_HOST: 0.0.0.0
+    MONAI_LABEL_PORT: "8000"
+  ports:
+    - "127.0.0.1:8000:8000"
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8000/info/"]
+    interval: 30s
+    timeout: 10s
+    retries: 10
+    start_period: 10m
+
+services:
+  monailabel:
+    <<: *monailabel-common
+    gpus: all
+
+  monailabel-cpu:
+    <<: *monailabel-common
+    profiles: ["cpu"]
+    environment:
+      MONAI_LABEL_HOST: 0.0.0.0
+      MONAI_LABEL_PORT: "8000"
+      CUDA_VISIBLE_DEVICES: ""

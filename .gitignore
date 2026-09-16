@@ -1,0 +1,35 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Clinical data and generated artifacts
+data/
+workspace/
+reports/
+results/
+models/
+*.dcm
+*.nii
+*.nii.gz
+*.nrrd
+*.mha
+*.mhd
+*.zip
+
+# Python and notebooks
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Editors and OS
+.DS_Store
+.vscode/
+.idea/

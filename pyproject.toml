@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "canine-spleen-benchmark"
+version = "0.1.0"
+description = "Zero-shot canine CT spleen segmentation benchmark with Orthanc and MONAI Label"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = [
+  "matplotlib>=3.9,<4",
+  "nibabel>=5.3,<6",
+  "numpy>=2.0,<3",
+  "pandas>=2.2,<4",
+  "python-dotenv>=1.0,<2",
+  "requests>=2.32,<3",
+  "scipy>=1.14,<2",
+]
+
+[project.optional-dependencies]
+notebook = [
+  "ipykernel>=6.29,<8",
+  "nbclient>=0.10,<1",
+  "nbformat>=5.10,<6",
+]
+dev = [
+  "pytest>=8.3,<10",
+  "ruff>=0.11,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
