@@ -34,11 +34,12 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[notebook,dev]"
-cp .env.example .env
 ```
 
-Fill in `.env` locally. Keep `ORTHANC_VERIFY_TLS=true` unless a private test endpoint
-has a documented certificate exception.
+The notebook prompts for the Orthanc URL, username, and hidden password at runtime,
+so credentials are not persisted. For non-notebook scripts, `.env.example` can
+optionally be copied to an ignored `.env`. Keep TLS verification enabled unless a
+private test endpoint has a documented certificate exception.
 
 Create the expected local directories and place radiologist masks in
 `data/radiologist_masks`. Each mask must be named `<case_id>.nii` or
@@ -67,7 +68,9 @@ only mode at <http://127.0.0.1:8000>.
 ## Run the benchmark
 
 Open `canine_spleen_benchmark.ipynb`, select the project environment as its kernel,
-and run cells in order:
+set `RUN_LIVE = True`, and run cells in order. The preflight cell asks for the
+Hostinger Orthanc URL/IP and login; the password input is hidden and remains only in
+kernel memory:
 
 1. Load configuration and run local/service preflight checks.
 2. Search Orthanc for CT series or provide explicit Orthanc series IDs.
@@ -75,6 +78,10 @@ and run cells in order:
 4. Pair CTs with same-basename radiologist masks.
 5. Call `segmentation_spleen` through the MONAI Label REST API.
 6. Validate geometry, calculate overlap/surface/volume metrics, and inspect overlays.
+
+The final notebook section includes an interactive CT viewer with case, plane, slice,
+window center/width, and mask-opacity controls. Radiologist-only voxels appear green,
+MONAI-only voxels red, and overlapping voxels yellow.
 
 The notebook writes a local manifest under `data/` and results under `reports/`.
 Both are ignored. For reproducibility, record the image digest, model metadata, and
